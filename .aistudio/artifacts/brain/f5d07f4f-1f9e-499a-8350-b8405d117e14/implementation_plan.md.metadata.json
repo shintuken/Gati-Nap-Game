@@ -1,0 +1,6 @@
+{
+  "summary":  "Kế hoạch triển khai tính năng mua nhiều lần cùng một gói nạp trong một giao dịch trên cổng Nạp Game Gati, bao gồm bộ chọn số lượng ở cột phải, tính toán giá gốc/khuyến mãi/tổng tiền, kiểm tra giới hạn kênh thanh toán, giả lập thay đổi giới hạn từ thanh công cụ Demo, và cập nhật luồng xác nhận cùng kết quả/lịch sử giao dịch.",
+  "updatedAt":  "2026-10-27T08:44:51.202423439Z",
+  "requestFeedback":  true,
+  "userFacing":  true
+}

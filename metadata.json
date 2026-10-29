@@ -1,0 +1,6 @@
+{
+  "name": "Cổng Nạp Game - Portal Game",
+  "description": "Hệ thống nạp game chính thức - An toàn, tiện lợi và hỗ trợ đa dạng phương thức thanh toán.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
