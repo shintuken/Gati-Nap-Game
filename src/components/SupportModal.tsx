@@ -11,6 +11,8 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
   const [ticketSent, setTicketSent] = useState(false);
   const [txnCode, setTxnCode] = useState('');
   const [issue, setIssue] = useState('');
+  const [email, setEmail] = useState('');
+  const [issueTitle, setIssueTitle] = useState('');
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -26,11 +28,14 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (![txnCode, email, issueTitle, issue].every(value => value.trim())) return;
     setTicketSent(true);
     setTimeout(() => {
       setTicketSent(false);
       setTxnCode('');
       setIssue('');
+      setEmail('');
+      setIssueTitle('');
       onClose();
     }, 2000);
   };
@@ -56,7 +61,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
             />
             <div>
               <h3 id="support-modal-title" className="text-base font-bold tracking-tight text-white">
-                Trung tâm hỗ trợ Gati Games 24/7
+                Trung tâm hỗ trợ Gati Games
               </h3>
               <p className="text-xs text-zinc-400">Giải đáp thắc mắc và hỗ trợ tra soát giao dịch nạp game Gati</p>
             </div>
@@ -77,21 +82,21 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
             <div className="p-3.5 rounded-xl bg-[#121214] border border-zinc-800 flex flex-col items-center text-center">
               <Phone className="w-5 h-5 text-[#fb5503] mb-1" />
               <span className="font-bold text-[#fcfcfc] text-xs">Tổng đài Gati</span>
-              <span className="text-[#fb5503] font-black font-mono mt-0.5 text-sm">1900 866 666</span>
+              <a href="tel:19006600" className="text-[#fb5503] font-black font-mono mt-0.5 text-sm">1900 6600</a>
               <span className="text-[10px] text-zinc-500">8:00 - 24:00 hàng ngày</span>
             </div>
 
             <div className="p-3.5 rounded-xl bg-[#121214] border border-zinc-800 flex flex-col items-center text-center">
               <MessageSquare className="w-5 h-5 text-emerald-400 mb-1" />
-              <span className="font-bold text-[#fcfcfc] text-xs">Zalo OA Gati</span>
-              <span className="text-emerald-400 font-bold mt-0.5">@gati_games</span>
+              <span className="font-bold text-[#fcfcfc] text-xs">Fanpage</span>
+              <a href="https://www.facebook.com/choigamecunggati" target="_blank" rel="noopener noreferrer" className="text-emerald-400 font-bold mt-0.5 underline">Chơi Game Cùng Gati</a>
               <span className="text-[10px] text-zinc-500">Hỗ trợ trực tuyến</span>
             </div>
 
             <div className="p-3.5 rounded-xl bg-[#121214] border border-zinc-800 flex flex-col items-center text-center">
               <Mail className="w-5 h-5 text-blue-400 mb-1" />
               <span className="font-bold text-[#fcfcfc] text-xs">Email khiếu nại</span>
-              <span className="text-blue-400 font-bold truncate max-w-full mt-0.5">hotro@gati.vn</span>
+              <a href="mailto:hotrogati@fpt.com" className="text-blue-400 font-bold truncate max-w-full mt-0.5">hotrogati@fpt.com</a>
               <span className="text-[10px] text-zinc-500">Xử lý trong 24 giờ</span>
             </div>
           </div>
@@ -106,7 +111,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
             <div className="space-y-2">
               <div className="p-3 rounded-xl bg-[#121214] border border-zinc-800 space-y-1">
                 <p className="font-semibold text-zinc-200">
-                  1. Tài khoản ngân hàng đã trừ tiền nhưng trong game chưa nhận Kim Nguyên Bảo?
+                  1. Tài khoản ngân hàng đã trừ tiền nhưng trong game chưa nhận vật phẩm?
                 </p>
                 <p className="text-zinc-400 text-[11px] leading-relaxed">
                   Thông thường giao dịch hoàn tất trong 30 giây. Vào giờ cao điểm có thể mất 1–3 phút để máy chủ game đồng bộ. Hãy đăng xuất nhân vật và đăng nhập lại game để kiểm tra hòm thư.
@@ -118,7 +123,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
                   2. Lỡ nạp nhầm nhân vật hoặc máy chủ thì xử lý thế nào?
                 </p>
                 <p className="text-zinc-400 text-[11px] leading-relaxed">
-                  Hệ thống yêu cầu xác nhận 2 lần trước khi thanh toán. Nếu nhân vật chưa tiêu thụ KNB, vui lòng liên hệ tổng đài 1900 866 666 kèm mã giao dịch trong vòng 15 phút để nhân viên kỹ thuật kiểm tra quy chế hoàn chuyển.
+                  Nếu nạp nhầm nhân vật hoặc máy chủ, vui lòng liên hệ tổng đài 1900 6600 và cung cấp mã giao dịch để được hỗ trợ kiểm tra.
                 </p>
               </div>
 
@@ -142,13 +147,17 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
             {ticketSent ? (
               <div className="p-3 rounded-lg bg-emerald-950/60 border border-emerald-700/50 text-emerald-300 flex items-center gap-2 text-xs">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>Yêu cầu đã được tiếp nhận! CSKH Gati sẽ phản hồi qua email hoặc số điện thoại trong 15 phút.</span>
+                <span>Đã ghi nhận yêu cầu trên bản demo. Thời gian tiếp nhận dự kiến: trong 24 giờ.</span>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-2.5">
                 <div>
+                  <label htmlFor="support-txn" className="block mb-1 font-semibold">Mã giao dịch *</label>
                   <input
+                    id="support-txn"
                     type="text"
+                    required
+                    pattern=".*\S.*"
                     value={txnCode}
                     onChange={(e) => setTxnCode(e.target.value)}
                     placeholder="Mã giao dịch (VD: GATI-123456)..."
@@ -156,7 +165,17 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
                   />
                 </div>
                 <div>
+                  <label htmlFor="support-email" className="block mb-1 font-semibold">Email *</label>
+                  <input id="support-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email liên hệ" className="w-full px-3 py-2 text-xs rounded-xl border border-zinc-700 bg-[#18181b] text-[#fcfcfc] focus:outline-none focus:border-[#fb5503]" />
+                </div>
+                <div>
+                  <label htmlFor="support-title" className="block mb-1 font-semibold">Tiêu đề lỗi *</label>
+                  <input id="support-title" type="text" required pattern=".*\S.*" value={issueTitle} onChange={(e) => setIssueTitle(e.target.value)} placeholder="Tiêu đề lỗi" className="w-full px-3 py-2 text-xs rounded-xl border border-zinc-700 bg-[#18181b] text-[#fcfcfc] focus:outline-none focus:border-[#fb5503]" />
+                </div>
+                <div>
+                  <label htmlFor="support-content" className="block mb-1 font-semibold">Nội dung *</label>
                   <textarea
+                    id="support-content"
                     rows={2}
                     required
                     value={issue}

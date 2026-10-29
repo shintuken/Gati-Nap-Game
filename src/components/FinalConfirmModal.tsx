@@ -56,7 +56,7 @@ export const FinalConfirmModal: React.FC<FinalConfirmModalProps> = ({
       const baseFormatted = new Intl.NumberFormat('vi-VN').format(totalBase);
       if (totalBonus > 0) {
         const bonusFormatted = new Intl.NumberFormat('vi-VN').format(totalBonus);
-        return `${baseFormatted} Kim Phiếu (+${bonusFormatted} Kim Phiếu bonus)`;
+        return `${baseFormatted} Kim Phiếu (+${bonusFormatted} Kim Phiếu tặng thêm)`;
       }
       return `${baseFormatted} Kim Phiếu`;
     }

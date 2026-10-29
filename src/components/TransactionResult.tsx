@@ -79,12 +79,13 @@ export const TransactionResult: React.FC<TransactionResultProps> = ({
           </h1>
 
           <p className="text-xs sm:text-sm text-zinc-400 max-w-md mx-auto">
-            {transaction.status === 'success' &&
-              'Kim Nguyên Bảo đã được chuyển trực tiếp vào tài khoản nhân vật của bạn trong game Gati.'}
+            {transaction.status === 'success' && (isPendingSync
+              ? 'Thanh toán đã được ghi nhận; vật phẩm đang được chuyển vào game.'
+              : 'Vật phẩm của gói nạp đã được chuyển vào tài khoản nhân vật của bạn trong game.')}
             {transaction.status === 'processing' &&
               'Cổng thanh toán đang đối soát dữ liệu với ngân hàng. Vui lòng không nạp lại ngay để tránh trùng lặp giao dịch.'}
             {transaction.status === 'failed' &&
-              (transaction.failureReason || 'Giao dịch bị từ chối hoặc người dùng hủy thanh toán. Tài khoản ngân hàng chưa bị trừ tiền.')}
+              'Giao dịch chưa hoàn tất. Bạn có thể thử lại hoặc đổi phương thức thanh toán. Nếu tài khoản đã bị trừ tiền, hãy liên hệ hỗ trợ kèm mã giao dịch.'}
           </p>
         </div>
 
@@ -224,13 +225,20 @@ export const TransactionResult: React.FC<TransactionResultProps> = ({
 
             <button
               type="button"
-              onClick={onTopupAgainSameChar}
+              onClick={transaction.status === 'processing' ? onOpenSupport : transaction.status === 'failed' ? onRetryPayment : onTopupAgainSameChar}
               className="w-full py-3 px-4 rounded-xl bg-[#fb5503] hover:bg-[#ff681c] active:bg-[#e04c02] text-white font-bold text-xs sm:text-sm shadow-md shadow-[#fb5503]/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>Nạp tiếp cho nhân vật này</span>
+              <span>{transaction.status === 'processing' ? 'Liên hệ hỗ trợ' : transaction.status === 'failed' ? 'Thử lại thanh toán' : 'Nạp tiếp cho nhân vật này'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
+
+          {transaction.status === 'failed' && (
+            <div className="flex justify-center gap-5 text-xs text-zinc-300">
+              <button type="button" onClick={onChangePaymentMethod} className="underline hover:text-white">Đổi phương thức thanh toán</button>
+              <button type="button" onClick={onOpenSupport} className="underline hover:text-white">Liên hệ hỗ trợ</button>
+            </div>
+          )}
 
           <div className="text-center pt-2">
             <button

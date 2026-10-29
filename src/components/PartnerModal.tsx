@@ -41,18 +41,7 @@ export const PartnerModal: React.FC<PartnerModalProps> = ({
   };
 
   const handleGuideClick = () => {
-    const today = new Date().toISOString().slice(0, 10);
-    try {
-      localStorage.setItem(`gati_partner_seen_today_${game.id}`, today);
-    } catch {
-      // ignore
-    }
-    if (game.guideUrl && game.guideUrl.trim() !== '') {
-      window.open(game.guideUrl, '_blank', 'noopener,noreferrer');
-      onClose();
-    } else {
-      onOpenGuide();
-    }
+    window.open('https://docs.google.com/document/d/1xLWDCXZRCpS7egh0AzfT-OlzB2Vv1vgWtI9B1jC4Nh8/edit?tab=t.0', '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -94,22 +83,10 @@ export const PartnerModal: React.FC<PartnerModalProps> = ({
             <ShieldAlert className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
             <div className="space-y-1">
               <p className="font-semibold text-amber-300">
-                Chuyển tiếp đến trang nạp chính thức của đối tác
-              </p>
-              <p className="text-amber-200/90 leading-relaxed text-xs sm:text-sm">
-                <strong>{game.name}</strong> sử dụng cổng nạp chính thức của đối tác{' '}
-                <strong>{game.partnerName || 'VNGGames'}</strong>. Bạn có thể xem hướng dẫn trước khi tiếp tục.
+                Bạn sắp chuyển sang trang nạp của {game.partnerName || 'đối tác'}.
               </p>
             </div>
           </div>
-
-          <div className="p-3 bg-[#121214] border border-zinc-800 rounded-xl text-xs text-zinc-300 flex items-center justify-between">
-            <span>✨ <strong>Quy tắc hiển thị:</strong> Popup chỉ mở lần đầu trong ngày. Từ lần thứ 2, hệ thống sẽ mở trực tiếp trang đối tác.</span>
-          </div>
-
-          <p className="text-xs text-zinc-500 text-center">
-            Bạn sẽ được chuyển sang website của đối tác trong tab mới. Gati Games không lưu trữ thông tin thanh toán cho tựa game này.
-          </p>
 
           {/* Action CTAs */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">

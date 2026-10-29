@@ -37,22 +37,41 @@ import { DemoController } from './components/DemoController';
 type StepNumber = 1 | 2 | 3;
 
 export default function App() {
+  const [savedDraft] = useState<any>(() => {
+    try {
+      return JSON.parse(sessionStorage.getItem('gati_recharge_draft_v1') || 'null');
+    } catch {
+      return null;
+    }
+  });
   // Authentication State
   const [user, setUser] = useState<UserAccount>(INITIAL_USER);
 
   // Stepper & View Navigation State (1. Chọn game, 2. Nạp game & Thanh toán, 3. Kết quả)
-  const [currentStep, setCurrentStep] = useState<StepNumber>(1);
-  const [maxAccessibleStep, setMaxAccessibleStep] = useState<StepNumber>(1);
+  const [currentStep, setCurrentStep] = useState<StepNumber>(savedDraft?.selectedGame && savedDraft?.currentStep === 2 ? 2 : 1);
+  const [maxAccessibleStep, setMaxAccessibleStep] = useState<StepNumber>(savedDraft?.selectedGame && savedDraft?.currentStep === 2 ? 2 : 1);
   const [currentView, setCurrentView] = useState<'wizard' | 'processing' | 'result'>('wizard');
 
   // Selected Data (Defaults to Gati flagship game Chiến Giới 4D, user selects server & character in Step 2)
-  const [selectedGame, setSelectedGame] = useState<Game | null>(MOCK_GAMES[0]);
-  const [selectedServer, setSelectedServer] = useState<GameServer | null>(null);
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
-  const [isCharacterConfirmed, setIsCharacterConfirmed] = useState<boolean>(false);
-  const [selectedPackage, setSelectedPackage] = useState<GamePackage | null>(MOCK_PACKAGES[1]); // Default 30 Kim Phiếu (max 5)
-  const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
-  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<PaymentMethodId | null>('vietqr');
+  const [selectedGame, setSelectedGame] = useState<Game | null>(savedDraft?.selectedGame ?? MOCK_GAMES[0]);
+  const [selectedServer, setSelectedServer] = useState<GameServer | null>(savedDraft?.selectedServer ?? null);
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(savedDraft?.selectedCharacter ?? null);
+  const [isCharacterConfirmed, setIsCharacterConfirmed] = useState<boolean>(savedDraft?.isCharacterConfirmed ?? false);
+  const [selectedPackage, setSelectedPackage] = useState<GamePackage | null>(savedDraft ? savedDraft.selectedPackage : MOCK_PACKAGES[1]);
+  const [selectedQuantity, setSelectedQuantity] = useState<number>(savedDraft?.selectedQuantity ?? 1);
+  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<PaymentMethodId | null>(savedDraft?.selectedPaymentMethodId ?? 'vietqr');
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem('gati_recharge_draft_v1', JSON.stringify({
+        currentStep: currentStep === 3 ? 2 : currentStep,
+        selectedGame, selectedServer, selectedCharacter, isCharacterConfirmed,
+        selectedPackage, selectedQuantity, selectedPaymentMethodId,
+      }));
+    } catch {
+      // Storage can be unavailable in private or restricted browsers.
+    }
+  }, [currentStep, selectedGame, selectedServer, selectedCharacter, isCharacterConfirmed, selectedPackage, selectedQuantity, selectedPaymentMethodId]);
 
   // Transactions State
   const [transactions, setTransactions] = useState<TransactionRecord[]>(INITIAL_TRANSACTIONS);
@@ -80,7 +99,7 @@ export default function App() {
       const baseFormatted = new Intl.NumberFormat('vi-VN').format(totalBase);
       if (totalBonus > 0) {
         const bonusFormatted = new Intl.NumberFormat('vi-VN').format(totalBonus);
-        return `${baseFormatted} Kim Phiếu (+${bonusFormatted} Kim Phiếu bonus)`;
+        return `${baseFormatted} Kim Phiếu (+${bonusFormatted} Kim Phiếu tặng thêm)`;
       }
       return `${baseFormatted} Kim Phiếu`;
     }
@@ -155,6 +174,9 @@ export default function App() {
   };
 
   const handleLogout = () => {
+    setSelectedServer(null);
+    setSelectedCharacter(null);
+    setSelectedPackage(null);
     setUser({
       id: '',
       username: '',
@@ -724,7 +746,7 @@ export default function App() {
                 </span>
               </div>
               <p className="text-xs text-zinc-400 leading-relaxed max-w-sm">
-                Cổng thanh toán & nạp game chính thức Gati Games. Hệ thống giao dịch tự động 24/7, bảo mật tiêu chuẩn quốc tế và hỗ trợ tức thì.
+                Cổng thanh toán & nạp game chính thức Gati Games. Tổng đài hỗ trợ từ 8:00–24:00 hàng ngày; yêu cầu được tiếp nhận trong 24 giờ.
               </p>
               <div className="flex items-center gap-2 text-xs text-zinc-400">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -739,10 +761,7 @@ export default function App() {
                   Danh mục game
                 </h4>
                 <ul className="space-y-2 text-zinc-400">
-                  <li><button onClick={() => { setCurrentView('wizard'); setCurrentStep(1); }} className="hover:text-[#fb5503] transition-colors cursor-pointer">Chiến Giới 4D</button></li>
-                  <li><button onClick={() => { setCurrentView('wizard'); setCurrentStep(1); }} className="hover:text-[#fb5503] transition-colors cursor-pointer">Kiếm Vũ Phong Vân</button></li>
-                  <li><button onClick={() => { setCurrentView('wizard'); setCurrentStep(1); }} className="hover:text-[#fb5503] transition-colors cursor-pointer">Thần Ma Tu Tiên</button></li>
-                  <li><button onClick={() => { setCurrentView('wizard'); setCurrentStep(1); }} className="hover:text-[#fb5503] transition-colors cursor-pointer">Tất cả game H5</button></li>
+                  <li><button onClick={() => { setCurrentView('wizard'); setCurrentStep(1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-[#fb5503] transition-colors cursor-pointer">Xem danh sách game</button></li>
                 </ul>
               </div>
 
@@ -751,9 +770,9 @@ export default function App() {
                   Hỗ trợ khách hàng
                 </h4>
                 <ul className="space-y-2 text-zinc-400">
-                  <li><button onClick={() => setSupportModalOpen(true)} className="hover:text-[#fb5503] transition-colors cursor-pointer">Hotline 1900 866 666</button></li>
-                  <li><button onClick={() => setSupportModalOpen(true)} className="hover:text-[#fb5503] transition-colors cursor-pointer">Email hotro@gati.vn</button></li>
-                  <li><button onClick={() => setGuideModalOpen(true)} className="hover:text-[#fb5503] transition-colors cursor-pointer">Hướng dẫn nạp game</button></li>
+                  <li><button onClick={() => setSupportModalOpen(true)} className="hover:text-[#fb5503] transition-colors cursor-pointer">Hotline 1900 6600</button></li>
+                  <li><button onClick={() => setSupportModalOpen(true)} className="hover:text-[#fb5503] transition-colors cursor-pointer">Email hotrogati@fpt.com</button></li>
+                  <li><a href="https://docs.google.com/document/d/1xLWDCXZRCpS7egh0AzfT-OlzB2Vv1vgWtI9B1jC4Nh8/edit?tab=t.0" target="_blank" rel="noopener noreferrer" className="hover:text-[#fb5503] transition-colors cursor-pointer">Hướng dẫn nạp game</a></li>
                   <li><button onClick={() => setHistoryModalOpen(true)} className="hover:text-[#fb5503] transition-colors cursor-pointer">Tra cứu giao dịch</button></li>
                 </ul>
               </div>

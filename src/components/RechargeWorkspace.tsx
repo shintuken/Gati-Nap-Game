@@ -149,7 +149,7 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
       const baseFormatted = new Intl.NumberFormat('vi-VN').format(totalBase);
       if (totalBonus > 0) {
         const bonusFormatted = new Intl.NumberFormat('vi-VN').format(totalBonus);
-        return `${baseFormatted} Kim Phiếu (+${bonusFormatted} Kim Phiếu bonus)`;
+        return `${baseFormatted} Kim Phiếu (+${bonusFormatted} Kim Phiếu tặng thêm)`;
       }
       return `${baseFormatted} Kim Phiếu`;
     }
@@ -171,28 +171,7 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
 
   const getCharactersForServer = (server: GameServer | null): Character[] => {
     if (!server) return [];
-    const list = charactersMap[server.id];
-    if (list && list.length > 0) return list;
-    return [
-      {
-        id: `char_${server.id}_1`,
-        name: 'ĐạiHiệpVõLâm',
-        roleId: '9527888',
-        level: 65,
-        serverId: server.id,
-        serverName: server.name,
-        avatarBg: 'bg-orange-600',
-      },
-      {
-        id: `char_${server.id}_2`,
-        name: 'TiêuDaoDu',
-        roleId: '9527889',
-        level: 52,
-        serverId: server.id,
-        serverName: server.name,
-        avatarBg: 'bg-indigo-600',
-      },
-    ];
+    return charactersMap[server.id] || [];
   };
 
   const availableCharacters = selectedServer ? getCharactersForServer(selectedServer) : [];
@@ -501,8 +480,8 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
                     <Server className="w-4 h-4 text-zinc-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
                   {!selectedServer && (
-                    <p className="text-[11px] text-[#fb5503] font-medium mt-1">
-                      * Vui lòng chọn máy chủ để tải danh sách nhân vật
+                    <p className="text-xs text-zinc-400 mt-1">
+                      Chọn máy chủ để xem nhân vật của bạn.
                     </p>
                   )}
                 </div>
@@ -568,11 +547,6 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
                     )}
                   </div>
 
-                  {!selectedServer && (
-                    <p className="text-[11px] text-zinc-500 mt-1">
-                      Ô nhân vật sẽ mở sau khi bạn chọn máy chủ
-                    </p>
-                  )}
                 </div>
               </div>
 
@@ -742,8 +716,9 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
 
                       {/* Selected checkmark indicator */}
                       {isSelected && !soldOut && (
-                        <div className="absolute top-2 left-2 w-5 h-5 rounded-full bg-[#fb5503] text-white flex items-center justify-center shadow-xs">
+                        <div className="absolute top-2 left-2 flex items-center gap-1 rounded-full bg-[#fb5503] px-2 py-1 text-white shadow-xs text-[10px] font-bold">
                           <Check className="w-3.5 h-3.5 stroke-[3]" />
+                          <span>Đã chọn</span>
                         </div>
                       )}
                     </div>
@@ -971,7 +946,8 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
                 </div>
 
                 {/* 3. List of supported payment methods for this specific package (Rule 6) */}
-                <div className="space-y-2.5">
+                <fieldset className="space-y-2.5">
+                  <legend className="sr-only">Chọn phương thức thanh toán</legend>
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] text-zinc-400 font-semibold block">
                       Kênh thanh toán khả dụng cho gói này:
@@ -987,18 +963,15 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
                     const isSelected = selectedPaymentMethodId === method.id;
 
                     return (
-                      <div
+                      <label
                         key={method.id}
-                        onClick={() => onSelectPaymentMethod(method.id)}
-                        role="radio"
-                        aria-checked={isSelected}
-                        tabIndex={0}
-                        className={`p-3 rounded-xl border transition-all text-left flex items-center justify-between gap-3 cursor-pointer ${
+                        className={`p-3 rounded-xl border transition-all text-left flex items-center justify-between gap-3 cursor-pointer focus-within:ring-2 focus-within:ring-white ${
                           isSelected
                             ? 'border-[#fb5503] bg-[#fb5503]/10 ring-1 ring-[#fb5503]/30 shadow-xs'
                             : 'border-zinc-800 bg-[#121214] hover:border-zinc-700 hover:bg-zinc-800/60'
                         }`}
                       >
+                        <input type="radio" name="payment-method" value={method.id} checked={isSelected} onChange={() => onSelectPaymentMethod(method.id)} className="sr-only" />
                         <div className="flex items-center gap-3 min-w-0">
                           <div
                             className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
@@ -1030,10 +1003,10 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
                             <div className="w-4 h-4 rounded-full border-2 border-zinc-700" />
                           )}
                         </div>
-                      </div>
+                      </label>
                     );
                   })}
-                </div>
+                </fieldset>
 
                 {/* 4. Chi tiết tính giá, khuyến mãi & CTA Button */}
                 <div className="pt-3 border-t border-zinc-800 space-y-3">
@@ -1110,13 +1083,9 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
         </div>
       ) : (
         /* Prompt to select character in step 1 */
-        <div className="p-8 rounded-2xl bg-[#18181b] border border-zinc-800 text-center space-y-2">
-          <User className="w-8 h-8 text-zinc-600 mx-auto" />
-          <p className="text-sm font-bold text-zinc-200">
-            Vui lòng chọn máy chủ và nhân vật ở trên
-          </p>
-          <p className="text-xs text-zinc-500 max-w-md mx-auto">
-            Sau khi bạn chọn nhân vật, danh sách các gói nạp và phương thức thanh toán tương ứng sẽ tự động hiển thị ngay tại đây.
+        <div className="p-4 rounded-xl bg-[#18181b] border border-zinc-800 text-center">
+          <p className="text-sm text-zinc-400">
+            Chọn nhân vật để xem gói nạp và phương thức thanh toán.
           </p>
         </div>
       )}
