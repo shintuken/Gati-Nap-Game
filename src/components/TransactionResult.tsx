@@ -140,13 +140,6 @@ export const TransactionResult: React.FC<TransactionResultProps> = ({
           </div>
 
           <div className="flex items-center justify-between pt-2">
-            <span className="text-zinc-400">Máy chủ & Nhân vật:</span>
-            <span className="font-semibold text-zinc-200">
-              {transaction.characterName} · <span className="text-[#fb5503] font-bold">{transaction.serverName}</span>
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between pt-2">
             <span className="text-zinc-400">Role ID:</span>
             <span className="font-mono text-zinc-300">{transaction.roleId}</span>
           </div>
@@ -154,21 +147,6 @@ export const TransactionResult: React.FC<TransactionResultProps> = ({
           <div className="flex items-center justify-between pt-2">
             <span className="text-zinc-400">Gói đã nạp:</span>
             <span className="font-bold text-white">{transaction.packageName}</span>
-          </div>
-
-          <div className="flex items-center justify-between pt-2">
-            <span className="text-zinc-400">Đơn giá:</span>
-            <div className="flex items-center gap-1.5 font-mono tabular-nums">
-              {transaction.originalUnitPrice &&
-                transaction.originalUnitPrice > transaction.unitPrice && (
-                  <span className="line-through text-zinc-500 text-[11px]">
-                    {formatVnd(transaction.originalUnitPrice)}
-                  </span>
-                )}
-              <span className="font-semibold text-zinc-200">
-                {formatVnd(transaction.unitPrice)}
-              </span>
-            </div>
           </div>
 
           <div className="flex items-center justify-between pt-2">

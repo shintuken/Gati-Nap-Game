@@ -149,16 +149,13 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
                   <div>
                     <p className="font-bold text-[#fcfcfc] text-sm">{item.gameName}</p>
                     <p className="text-zinc-400 mt-0.5">
-                      Nhân vật: <strong className="text-zinc-200">{item.characterName}</strong> · {item.serverName} (Role ID: {item.roleId})
+                      Role ID: <span className="font-mono text-zinc-200">{item.roleId}</span>
                     </p>
                     <p className="text-zinc-400 mt-0.5">
                       Gói:{' '}
                       <strong className="text-zinc-200">{item.packageName}</strong>{' '}
                       <span className="text-[#fb5503] font-mono font-bold">
                         × {item.quantity || 1}
-                      </span>{' '}
-                      <span className="text-zinc-500 font-mono">
-                        ({formatVnd(item.unitPrice || item.price)}/gói)
                       </span>{' '}
                       · {item.paymentMethodName}
                     </p>
