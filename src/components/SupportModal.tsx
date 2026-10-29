@@ -9,7 +9,6 @@ interface SupportModalProps {
 
 export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) => {
   const [ticketSent, setTicketSent] = useState(false);
-  const [txnCode, setTxnCode] = useState('');
   const [issue, setIssue] = useState('');
   const [email, setEmail] = useState('');
   const [issueTitle, setIssueTitle] = useState('');
@@ -28,11 +27,10 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (![txnCode, email, issueTitle, issue].every(value => value.trim())) return;
+    if (![email, issueTitle, issue].every(value => value.trim())) return;
     setTicketSent(true);
     setTimeout(() => {
       setTicketSent(false);
-      setTxnCode('');
       setIssue('');
       setEmail('');
       setIssueTitle('');
@@ -152,28 +150,21 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) =
             ) : (
               <form onSubmit={handleSubmit} className="space-y-2.5">
                 <div>
-                  <label htmlFor="support-txn" className="block mb-1 font-semibold">Mã giao dịch *</label>
-                  <input
-                    id="support-txn"
-                    type="text"
-                    required
-                    pattern=".*\S.*"
-                    value={txnCode}
-                    onChange={(e) => setTxnCode(e.target.value)}
-                    placeholder="Mã giao dịch (VD: GATI-123456)..."
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-zinc-700 bg-[#18181b] text-[#fcfcfc] focus:outline-none focus:border-[#fb5503]"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="support-email" className="block mb-1 font-semibold">Email *</label>
+                  <label htmlFor="support-email" className="block mb-1 font-semibold">
+                    Email <span className="text-red-500">*</span>
+                  </label>
                   <input id="support-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email liên hệ" className="w-full px-3 py-2 text-xs rounded-xl border border-zinc-700 bg-[#18181b] text-[#fcfcfc] focus:outline-none focus:border-[#fb5503]" />
                 </div>
                 <div>
-                  <label htmlFor="support-title" className="block mb-1 font-semibold">Tiêu đề lỗi *</label>
+                  <label htmlFor="support-title" className="block mb-1 font-semibold">
+                    Tiêu đề lỗi <span className="text-red-500">*</span>
+                  </label>
                   <input id="support-title" type="text" required pattern=".*\S.*" value={issueTitle} onChange={(e) => setIssueTitle(e.target.value)} placeholder="Tiêu đề lỗi" className="w-full px-3 py-2 text-xs rounded-xl border border-zinc-700 bg-[#18181b] text-[#fcfcfc] focus:outline-none focus:border-[#fb5503]" />
                 </div>
                 <div>
-                  <label htmlFor="support-content" className="block mb-1 font-semibold">Nội dung *</label>
+                  <label htmlFor="support-content" className="block mb-1 font-semibold">
+                    Nội dung <span className="text-red-500">*</span>
+                  </label>
                   <textarea
                     id="support-content"
                     rows={2}
