@@ -21,8 +21,6 @@ export const TransactionResult: React.FC<TransactionResultProps> = ({
   onSelectAnotherGame,
   onOpenHistory,
   onOpenSupport,
-  onRetryPayment,
-  onChangePaymentMethod,
   onCheckStatus,
 }) => {
   const [copied, setCopied] = useState(false);
@@ -225,20 +223,13 @@ export const TransactionResult: React.FC<TransactionResultProps> = ({
 
             <button
               type="button"
-              onClick={transaction.status === 'processing' ? onOpenSupport : transaction.status === 'failed' ? onRetryPayment : onTopupAgainSameChar}
+              onClick={transaction.status === 'success' ? onTopupAgainSameChar : onOpenSupport}
               className="w-full py-3 px-4 rounded-xl bg-[#fb5503] hover:bg-[#ff681c] active:bg-[#e04c02] text-white font-bold text-xs sm:text-sm shadow-md shadow-[#fb5503]/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>{transaction.status === 'processing' ? 'Liên hệ hỗ trợ' : transaction.status === 'failed' ? 'Thử lại thanh toán' : 'Nạp tiếp cho nhân vật này'}</span>
+              <span>{transaction.status === 'success' ? 'Nạp tiếp cho nhân vật này' : 'Liên hệ hỗ trợ'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
-
-          {transaction.status === 'failed' && (
-            <div className="flex justify-center gap-5 text-xs text-zinc-300">
-              <button type="button" onClick={onChangePaymentMethod} className="underline hover:text-white">Đổi phương thức thanh toán</button>
-              <button type="button" onClick={onOpenSupport} className="underline hover:text-white">Liên hệ hỗ trợ</button>
-            </div>
-          )}
 
           <div className="text-center pt-2">
             <button
