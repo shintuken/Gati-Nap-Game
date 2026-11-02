@@ -25,7 +25,6 @@ export const Step4Payment: React.FC<Step4PaymentProps> = ({
   onInitiatePayment,
   onBackToPackages,
 }) => {
-  const [agreementChecked, setAgreementChecked] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formatVnd = (amount: number) => {
@@ -48,7 +47,7 @@ export const Step4Payment: React.FC<Step4PaymentProps> = ({
   };
 
   const handleSubmit = () => {
-    if (!selectedMethodId || !agreementChecked || isSubmitting) return;
+    if (!selectedMethodId || isSubmitting) return;
 
     setIsSubmitting(true);
     setTimeout(() => {
@@ -57,7 +56,7 @@ export const Step4Payment: React.FC<Step4PaymentProps> = ({
     }, 450);
   };
 
-  const isFormValid = !!selectedMethodId && agreementChecked && !isSubmitting;
+  const isFormValid = !!selectedMethodId && !isSubmitting;
 
   return (
     <div className="space-y-6">
@@ -248,21 +247,6 @@ export const Step4Payment: React.FC<Step4PaymentProps> = ({
               </div>
             </div>
 
-            {/* Checkbox Agreement */}
-            <div className="pt-2 border-t border-slate-100">
-              <label className="flex items-start gap-2.5 cursor-pointer text-xs text-slate-700 leading-relaxed select-none">
-                <input
-                  type="checkbox"
-                  checked={agreementChecked}
-                  onChange={(e) => setAgreementChecked(e.target.checked)}
-                  className="mt-0.5 rounded border-slate-300 text-orange-600 focus:ring-orange-500 cursor-pointer w-4 h-4"
-                />
-                <span>
-                  Tôi đã kiểm tra đúng game, máy chủ và nhân vật, đồng thời đồng ý với điều khoản thanh toán Gati Games.
-                </span>
-              </label>
-            </div>
-
             {/* Primary CTA */}
             <button
               type="button"
@@ -286,11 +270,6 @@ export const Step4Payment: React.FC<Step4PaymentProps> = ({
             {!selectedMethodId && (
               <p className="text-[11px] text-amber-600 text-center">
                 * Vui lòng chọn một phương thức thanh toán bên cạnh
-              </p>
-            )}
-            {selectedMethodId && !agreementChecked && (
-              <p className="text-[11px] text-amber-600 text-center">
-                * Vui lòng tích chọn xác nhận thông tin nhân vật và điều khoản
               </p>
             )}
           </div>

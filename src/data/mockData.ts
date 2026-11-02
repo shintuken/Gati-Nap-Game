@@ -329,6 +329,8 @@ export const MOCK_CHARACTERS: Record<string, Character[]> = {
   ],
 };
 
+export const GLOBAL_MAX_PACKAGE_QUANTITY = 10;
+
 export const MOCK_PACKAGES: GamePackage[] = [
   {
     id: 'pkg_6_kp',
@@ -357,7 +359,7 @@ export const MOCK_PACKAGES: GamePackage[] = [
     baseCurrencyNumeric: 30,
     bonusCurrencyNumeric: 3,
     price: 100000,
-    maxQuantity: 5,
+    maxQuantity: 10,
     iconType: 'scroll',
     detailDesc: 'Nạp nhận 30 Kim Phiếu tặng kèm 3 Kim Phiếu khuyến mãi.',
     detailPerks: [
@@ -378,7 +380,7 @@ export const MOCK_PACKAGES: GamePackage[] = [
     bonusCurrencyNumeric: 12,
     price: 270000,
     originalPrice: 300000,
-    maxQuantity: 5,
+    maxQuantity: 10,
     iconType: 'chest',
     detailDesc: 'Gói nạp ưu đãi cao được đông đảo game thủ lựa chọn.',
     detailPerks: [
@@ -399,7 +401,7 @@ export const MOCK_PACKAGES: GamePackage[] = [
     bonusCurrencyNumeric: 30,
     price: 510000,
     originalPrice: 600000,
-    maxQuantity: 5,
+    maxQuantity: 10,
     iconType: 'chest',
     detailDesc: 'Nạp nhận 198 Kim Phiếu nhận ngay danh hiệu độc quyền.',
     detailPerks: [
@@ -419,7 +421,7 @@ export const MOCK_PACKAGES: GamePackage[] = [
     baseCurrencyNumeric: 648,
     bonusCurrencyNumeric: 130,
     price: 2000000,
-    maxQuantity: 3,
+    maxQuantity: 10,
     iconType: 'crown',
     detailDesc: 'Gói đặc quyền bang hội và cao thủ đua top máy chủ.',
     detailPerks: [
@@ -441,7 +443,7 @@ export const MOCK_PACKAGES: GamePackage[] = [
     bonusCurrencyNumeric: 400,
     price: 4250000,
     originalPrice: 5000000,
-    maxQuantity: 2,
+    maxQuantity: 10,
     iconType: 'crown',
     detailDesc: 'Gói siêu cấp tích lũy tài nguyên dồi dào, thăng cấp thần tốc.',
     detailPerks: [
@@ -461,7 +463,7 @@ export const MOCK_PACKAGES: GamePackage[] = [
     baseCurrencyNumeric: 3298,
     bonusCurrencyNumeric: 1000,
     price: 10000000,
-    maxQuantity: 2,
+    maxQuantity: 10,
     iconType: 'crown',
     detailDesc: 'Gói cao cấp nhất cổng game Gati, hỗ trợ thanh toán hạn mức cao qua VietQR & Thẻ ngân hàng.',
     detailPerks: [
@@ -480,9 +482,9 @@ export const MOCK_PACKAGES: GamePackage[] = [
     bonusAmount: 'Mỗi ngày nhận thêm 10 Kim Phiếu (30 ngày)',
     price: 120000,
     originalPrice: 150000,
-    maxQuantity: 1,
+    maxQuantity: 3,
     iconType: 'card',
-    limitText: 'Gói này chỉ được mua 1 lần trong mỗi giao dịch.',
+    limitText: 'Giới hạn mua tối đa 3 lần cho gói này.',
     detailDesc: 'Thẻ đặc quyền 30 ngày nhận phúc lợi mỗi ngày khi đăng nhập.',
     detailPerks: [
       'Nhận ngay 30 Kim Phiếu lúc kích hoạt',
@@ -499,9 +501,9 @@ export const MOCK_PACKAGES: GamePackage[] = [
     currencyAmount: 'Nhận ngay 10 Kim Phiếu',
     bonusAmount: 'Mỗi ngày nhận thêm 6 Kim Phiếu (7 ngày)',
     price: 50000,
-    maxQuantity: 1,
+    maxQuantity: 5,
     iconType: 'card',
-    limitText: 'Gói này chỉ được mua 1 lần trong mỗi giao dịch.',
+    limitText: 'Giới hạn mua tối đa 5 lần cho gói này.',
     detailDesc: 'Thẻ tuần duy trì phúc lợi nhanh chóng và tiết kiệm.',
     detailPerks: [
       'Nhận ngay 10 Kim Phiếu',

@@ -33,6 +33,7 @@ import {
   Plus,
 } from 'lucide-react';
 import { PackageDetailModal } from './PackageDetailModal';
+import { GLOBAL_MAX_PACKAGE_QUANTITY } from '../data/mockData';
 
 interface RechargeWorkspaceProps {
   game: Game;
@@ -80,7 +81,6 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
   const [loadingCharacters, setLoadingCharacters] = useState(false);
   const [activeCategory, setActiveCategory] = useState<PackageCategory>('all');
   const [detailModalPackage, setDetailModalPackage] = useState<GamePackage | null>(null);
-  const [agreementChecked, setAgreementChecked] = useState(true);
   const [syncNotice, setSyncNotice] = useState(false);
   const [maintenanceModalOpen, setMaintenanceModalOpen] = useState(edgeCase === 'server_maintenance');
 
@@ -128,7 +128,7 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
   const effectiveMaxQuantity =
     dynamicLimitOverride !== null
       ? dynamicLimitOverride
-      : selectedPackage?.maxQuantity ?? 1;
+      : Math.min(selectedPackage?.maxQuantity ?? GLOBAL_MAX_PACKAGE_QUANTITY, GLOBAL_MAX_PACKAGE_QUANTITY);
 
   // Pricing & promotion calculations (Rule 5)
   const unitPrice = selectedPackage ? selectedPackage.price : 0;
@@ -788,7 +788,7 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
                             aria-label="Tăng số lượng"
                             title={
                               selectedQuantity >= effectiveMaxQuantity
-                                ? `Tối đa ${effectiveMaxQuantity} gói / giao dịch`
+                                ? `Tối đa ${effectiveMaxQuantity} lần / gói`
                                 : 'Tăng số lượng'
                             }
                             className={`w-7 h-7 rounded-md font-bold flex items-center justify-center transition-all border ${
@@ -881,7 +881,7 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
                         Số lượng
                       </span>
                       <span className="text-[11px] text-zinc-400">
-                        Tối đa {effectiveMaxQuantity} gói / giao dịch
+                        Giới hạn tối đa {effectiveMaxQuantity} lần / gói
                       </span>
                     </div>
 
@@ -929,7 +929,7 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
                     <div className="p-2.5 rounded-lg bg-rose-950/50 border border-rose-600/50 text-rose-200 text-[11px] flex items-start gap-2 animate-in fade-in">
                       <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
                       <span className="font-semibold leading-relaxed">
-                        Số lượng tối đa của gói đã thay đổi. Vui lòng điều chỉnh xuống tối đa {effectiveMaxQuantity} gói để tiếp tục.
+                        Số lượng tối đa của gói đã thay đổi. Vui lòng điều chỉnh xuống tối đa {effectiveMaxQuantity} lần để tiếp tục.
                       </span>
                     </div>
                   ) : effectiveMaxQuantity === 1 ? (
@@ -940,7 +940,7 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
                   ) : selectedQuantity === effectiveMaxQuantity ? (
                     <div className="pt-1 border-t border-zinc-800/80 flex items-center gap-1.5 text-[11px] text-amber-400 font-medium">
                       <Info className="w-3.5 h-3.5 shrink-0 text-amber-400" />
-                      <span>Bạn đã chọn số lượng tối đa cho gói này.</span>
+                      <span>Bạn đã chọn số lượng tối đa cho gói này ({effectiveMaxQuantity} lần).</span>
                     </div>
                   ) : null}
                 </div>
@@ -1043,25 +1043,11 @@ export const RechargeWorkspace: React.FC<RechargeWorkspaceProps> = ({
                     </div>
                   </div>
 
-                  {/* Terms Checkbox */}
-                  <label className="flex items-start gap-2 cursor-pointer text-[11px] text-zinc-400 select-none">
-                    <input
-                      type="checkbox"
-                      checked={agreementChecked}
-                      onChange={(e) => setAgreementChecked(e.target.checked)}
-                      className="mt-0.5 rounded border-zinc-700 bg-zinc-900 text-[#fb5503] focus:ring-[#fb5503] cursor-pointer"
-                    />
-                    <span>
-                      Tôi đồng ý với điều khoản thanh toán và quy định nạp game của Gati Games.
-                    </span>
-                  </label>
-
                   {/* Primary CTA: Thanh toán ngay */}
                   <button
                     type="button"
                     onClick={handleProceedClick}
                     disabled={
-                      !agreementChecked ||
                       !selectedPaymentMethodId ||
                       !isCurrentPaymentMethodValid ||
                       selectedQuantity > effectiveMaxQuantity ||

@@ -57,7 +57,16 @@ export default function App() {
   const [selectedServer, setSelectedServer] = useState<GameServer | null>(savedDraft?.selectedServer ?? null);
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(savedDraft?.selectedCharacter ?? null);
   const [isCharacterConfirmed, setIsCharacterConfirmed] = useState<boolean>(savedDraft?.isCharacterConfirmed ?? false);
-  const [selectedPackage, setSelectedPackage] = useState<GamePackage | null>(savedDraft ? savedDraft.selectedPackage : MOCK_PACKAGES[1]);
+  const [selectedPackage, setSelectedPackage] = useState<GamePackage | null>(() => {
+    if (savedDraft) {
+      if (!savedDraft.selectedPackage) return null;
+      return (
+        MOCK_PACKAGES.find((p) => p.id === savedDraft.selectedPackage.id) ||
+        savedDraft.selectedPackage
+      );
+    }
+    return MOCK_PACKAGES[1];
+  });
   const [selectedQuantity, setSelectedQuantity] = useState<number>(savedDraft?.selectedQuantity ?? 1);
   const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<PaymentMethodId | null>(savedDraft?.selectedPaymentMethodId ?? 'vietqr');
 

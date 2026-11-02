@@ -135,10 +135,15 @@ export const PackageDetailModal: React.FC<PackageDetailModalProps> = ({
                 </div>
               )}
 
-              <p className="text-[11px] text-zinc-500 italic pt-1">
-                {pkg.noteVIP ||
-                  '*Lưu ý: mua Kim Phiếu sẽ không cộng điểm VIP, cần sử dụng Kim Phiếu mua các túi quà trong game mới có thể tăng điểm VIP.'}
-              </p>
+              <div className="space-y-1 pt-1">
+                <p className="text-[11px] text-amber-400/90 font-medium">
+                  *Giới hạn mua: Tối đa {Math.min(pkg.maxQuantity, 10)} lần cho gói này.
+                </p>
+                <p className="text-[11px] text-zinc-500 italic">
+                  {pkg.noteVIP ||
+                    '*Lưu ý: mua Kim Phiếu sẽ không cộng điểm VIP, cần sử dụng Kim Phiếu mua các túi quà trong game mới có thể tăng điểm VIP.'}
+                </p>
+              </div>
             </div>
           </div>
 
